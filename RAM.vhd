@@ -18,7 +18,7 @@ end RAM;
 architecture Behavioral of RAM is
 type MEMORY is array(2**size-1 downto 0) of signed(bits-1 downto 0);
 
-signal RAM_block : MEMORY;
+signal RAM_block : MEMORY := (others => "0000000000000000");
 signal addr : integer range 0 to 2**3-1;
 signal a : unsigned(size-1 downto 0);
 
@@ -34,11 +34,12 @@ process(clk, reset)
 begin
 if reset = '1' then
 output <= (others => '0');
-elsif falling_edge(clk) then
+elsif rising_edge(clk) then
     if load = '1' then
         RAM_block(addr) <= signed(input);
     end if;
-elsif rising_edge(clk) then
+
+elsif falling_edge(clk) then
     output <= std_logic_vector(RAM_block(addr));
 end if;
 end process;
