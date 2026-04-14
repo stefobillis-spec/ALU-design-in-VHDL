@@ -24,7 +24,7 @@ end ALU;
 architecture Behavioral of ALU is 
 begin
 
-process(reset)
+process(reset, x, y)
 
 variable x_var : signed(size-1 downto 0);
 variable y_var : signed(size-1 downto 0);

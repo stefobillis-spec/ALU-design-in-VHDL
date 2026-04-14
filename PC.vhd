@@ -15,7 +15,7 @@ entity PC is
 end PC;
 
 architecture Behavioral of PC is
-signal outval : signed(bits-1 downto 0) := (others => '0');
+signal outval : unsigned(bits-1 downto 0) := (others => '0');
 
 begin
 
@@ -29,7 +29,7 @@ if reset = '1' then
     outval <= (others => '0');
 else
     if load = '1' then
-        outval <= signed(input);
+        outval <= unsigned(input);
     else
         if inc = '1' then
             outval <= outval + 1;
