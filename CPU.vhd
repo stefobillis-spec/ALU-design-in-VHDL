@@ -37,7 +37,7 @@ component PC is
            load : in STD_LOGIC;
            inc : in STD_LOGIC;
            reset : in STD_LOGIC;
-           output : out STD_LOGIC_VECTOR (bits-1 downto 0));
+           output : out STD_LOGIC_VECTOR (bits-2 downto 0));
 end component;
 
 ------------------ Intermediate signals -------------------
@@ -48,68 +48,91 @@ signal ALUout : std_logic_vector(bits-1 downto 0);
 signal zr : std_logic := '0';
 signal neg : std_logic := '0';
 signal pos : std_logic := '0';
-signal PC_out : std_logic_vector(bits-2 downto 0);
+
 
 ----------------- Control signals ------------------------
-signal alu_control : std_logic_vector(5 downto 0); -- ????
-signal loadA : std_logic := '0';
-signal loadD : std_logic := '0';
 signal loadPC : std_logic := '0';
 signal jump : std_logic := '0';
-signal OP : std_logic; 
+
 
 
 begin
 
 ----------------- Control signals logic -------------------
-OP <= instr(15);
-alu_control <= instr(11 downto 6);
-pos <= not(neg or zr);
-loadA <= (not(OP) or instr(5));
-loadD <= OP and instr(4);
+pos <= not(neg or zr); 
 jump <= (instr(2) and neg) or (instr(1) and zr) or (instr(0) and pos);
-loadPC <= jump and OP;
+loadPC <= jump and instr(15);
 
 ---------------- I/O signals logic -----------------------
-outM <= ALUout;
-writeM <= OP and instr(3);
+outM <= ALUout; 
+writeM <= instr(15) and instr(3); 
 addrM <= A_reg(bits-2 downto 0);
-prg_cntr <= PC_out(bits-2 downto 0);
+
 
 
 ---------------- ALU component instantiation -------------
-ALU1: ALU port map(reset => reset, x => D_reg, y => ALU_y_in,
-	     control_bits => alu_control, output => ALUout, zero => zr, negative => neg);
+ALU1: ALU port map(reset => reset, x => D_reg, y => alu_y_in,
+	     control_bits => instr(11 downto 6), output => ALUout, zero => zr, negative => neg);
 	     
 ----------------- PC component instantiation -------------
 PC1: PC port map(input => A_reg, clk => clk, load => loadPC,
-                 inc => '1', reset => reset, output => PC_out);
+                 inc => '1', reset => reset, output => prg_cntr);
 
 
 --------------- A register process --------------------
-A_reg_proc: process(clk)
+--A_reg_proc: process(clk,reset)
+--begin
+--if reset = '1' then
+--    A_reg <= (others => '0');
+--elsif falling_edge(clk) then
+--if (not(instr(15) or instr(5))) = '1' then
+--    if instr(15) = '1' then
+--        A_reg <= ALUout;
+--    else
+--        A_reg <= instr;
+--    end if;
+--end if;
+--end if;
+--end process;
+
+A_reg_proc: process(clk,reset)
 begin
-if rising_edge(clk) then
-if loadA = '1' then
-    if OP = '1' then
-        A_reg <= ALUout;
-    else
+if reset = '1' then
+    A_reg <= (others => '0');
+elsif falling_edge(clk) then
+    if instr(15) = '0' then
         A_reg <= instr;
-    end if;
+    elsif (instr(15) and instr(5)) = '1' then
+        A_reg <= ALUout;
+        
 end if;
 end if;
 end process;
 
 --------------- D register process -------------------
-D_reg_proc: process(clk)
+D_reg_proc: process(clk,reset)
 begin
-if rising_edge(clk) then
-if loadD = '1' then
+if reset = '1' then
+    D_reg <= (others => '0');
+elsif falling_edge(clk) then
+if (instr(15) and instr(4)) = '1' then
     D_reg <= ALUout;
 end if;
 end if;
 end process;
 
+-------------- ALU y input -----------------------
+alu_y_in <= inM when instr(12) = '1' else A_reg;
+
+
+--ALU_y_proc: process(instr,A_reg,inM)
+--begin
+--if instr(12) = '1' then
+--    alu_y_in <= inM;
+--else
+--    alu_y_in <= A_reg;
+--end if;
+--end process;
 
 
 end Behavioral;
