@@ -12,10 +12,7 @@ entity ROM is
 end ROM;
 
 architecture Behavioral of ROM is
---signal addr : integer := 0;
-
 begin
---addr <= address;
 
 process(reset, address)
 begin

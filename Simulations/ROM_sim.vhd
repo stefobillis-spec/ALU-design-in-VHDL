@@ -17,8 +17,8 @@ Port ( reset : in STD_LOGIC;
 end component;
 
 signal reset_tb : std_logic := '1';
-signal address_tb : std_logic_vector(bits-1 downto 0);
-signal data_tb : std_logic_vector(bits-1 downto 0);
+signal address_tb : std_logic_vector(bits-1 downto 0) := (others => '0');
+signal data_tb : std_logic_vector(bits-1 downto 0) := (others => '0');
 
 begin
 
@@ -31,9 +31,9 @@ wait for 25 ns;
 reset_tb <= '0';
 address_tb <= (others => '0');
 wait for 10ns;
-address_tb <= "0000000000000010";
+address_tb <= "0000000000000010"; -- address = 2
 wait for 10ns;
-address_tb <= "0000000000000001";
+address_tb <= "0000000000000001"; -- address = 1
 wait for 10ns;
 reset_tb <= '1';
 wait;
