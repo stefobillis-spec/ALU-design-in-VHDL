@@ -174,5 +174,7 @@ M=D
 
 
 (END)
+@R4
+M=1
 @END
 0;JMP
