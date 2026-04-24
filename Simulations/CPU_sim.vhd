@@ -69,7 +69,7 @@ instr_tb <= "1110011111001000"; -- M=D+1
 wait for 10 ns;
 instr_tb <= "0000000000000101"; -- @R5
 wait for 10 ns;
-instr_tb <= "1111110011010000"; -- D=-M
+instr_tb <= "1111110011010000"; -- D=-M 
 
 wait;
 end process;
