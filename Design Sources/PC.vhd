@@ -24,12 +24,12 @@ output <= std_logic_vector(outval);
 
 process(clk)
 begin
-if rising_edge(clk) then
+if falling_edge(clk) then
 if reset = '1' then
     outval <= (others => '0');
 else
     if load = '1' then
-        outval <= unsigned(input);
+        outval <= unsigned(input(bits-1 downto 0));
     else
         if inc = '1' then
             outval <= outval + 1;

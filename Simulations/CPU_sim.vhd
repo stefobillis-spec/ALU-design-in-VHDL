@@ -17,7 +17,7 @@ Port(reset : in std_logic;
       outM : out std_logic_vector(bits-1 downto 0);
       writeM : out std_logic;
       addrM : out std_logic_vector (bits-2 downto 0);
-      prg_cntr : out std_logic_vector(bits-2 downto 0));
+      prg_cntr : out std_logic_vector(bits-1 downto 0));
 end component;
 
 signal reset_tb : std_logic := '0';
@@ -27,7 +27,7 @@ signal instr_tb : std_logic_vector (bits-1 downto 0) := (others => '0');
 signal outM_tb : std_logic_vector(bits-1 downto 0) := (others => '0');
 signal writeM_tb : std_logic := '0';
 signal addrM_tb : std_logic_vector (bits-2 downto 0) := (others => '0');
-signal prg_cntr_tb : std_logic_vector(bits-2 downto 0) := (others => '0');
+signal prg_cntr_tb : std_logic_vector(bits-1 downto 0) := (others => '0');
 
 begin
 
@@ -69,7 +69,11 @@ instr_tb <= "1110011111001000"; -- M=D+1
 wait for 10 ns;
 instr_tb <= "0000000000000101"; -- @R5
 wait for 10 ns;
-instr_tb <= "1111110011010000"; -- D=-M 
+instr_tb <= "1111110011010000"; -- D=-M
+wait for 10 ns;
+instr_tb <= "0000000000010010"; -- @18
+wait for 10 ns;
+instr_tb <= "1110101010000111"; -- 0;JMP
 
 wait;
 end process;

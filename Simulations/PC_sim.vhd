@@ -39,27 +39,27 @@ clk_tb <= not(clk_tb) after 5 ns;
 process
 begin
 wait for 20 ns;
-input_tb <= "1000001010000101";
+input_tb <= "1000001010000101"; -- input = -32123
 inc_tb <= '1';
 wait for 20ns;
-load_tb <= '1';
+load_tb <= '1'; -- load is on
 wait for 10ns;
-load_tb <= '0';
+load_tb <= '0'; -- load is off
 wait for 20ns;
 reset_tb <= '1';
 wait for 20ns;
-input_tb <= "0011000000111001";
+input_tb <= "0011000000111001"; -- input = 12345
 inc_tb <= '0';
 wait for 10ns;
-load_tb <= '1';
-wait for 10ns;
-reset_tb <= '0';
+load_tb <= '1'; -- load is on
+wait for 10 ns;
+reset_tb <= '0'; -- reset is on
 wait for 10ns;
 inc_tb <= '1';
 wait for 10ns;
-load_tb <= '0';
+load_tb <= '0'; -- load is off
 wait for 50ns;
-reset_tb <= '1';
+reset_tb <= '1'; -- reset is on
 
 wait;
 end process;

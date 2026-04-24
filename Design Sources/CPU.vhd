@@ -12,7 +12,7 @@ Port (reset : in std_logic;
       outM : out std_logic_vector(bits-1 downto 0);
       writeM : out std_logic;
       addrM : out std_logic_vector (bits-2 downto 0);
-      prg_cntr : out std_logic_vector(bits-2 downto 0));
+      prg_cntr : out std_logic_vector(bits-1 downto 0));
 end CPU;
 
 architecture Behavioral of CPU is
@@ -37,7 +37,7 @@ component PC is
            load : in STD_LOGIC;
            inc : in STD_LOGIC;
            reset : in STD_LOGIC;
-           output : out STD_LOGIC_VECTOR (bits-2 downto 0));
+           output : out STD_LOGIC_VECTOR (bits-1 downto 0));
 end component;
 
 ------------------ Intermediate signals -------------------
@@ -68,6 +68,9 @@ outM <= ALUout;
 writeM <= instr(15) and instr(3); 
 addrM <= A_reg(bits-2 downto 0);
 
+-------------- ALU y input -----------------------
+alu_y_in <= inM when instr(12) = '1' else A_reg;
+
 
 
 ---------------- ALU component instantiation -------------
@@ -79,21 +82,6 @@ PC1: PC port map(input => A_reg, clk => clk, load => loadPC,
                  inc => '1', reset => reset, output => prg_cntr);
 
 
---------------- A register process --------------------
---A_reg_proc: process(clk,reset)
---begin
---if reset = '1' then
---    A_reg <= (others => '0');
---elsif falling_edge(clk) then
---if (not(instr(15) or instr(5))) = '1' then
---    if instr(15) = '1' then
---        A_reg <= ALUout;
---    else
---        A_reg <= instr;
---    end if;
---end if;
---end if;
---end process;
 
 A_reg_proc: process(clk,reset)
 begin
@@ -121,18 +109,6 @@ end if;
 end if;
 end process;
 
--------------- ALU y input -----------------------
-alu_y_in <= inM when instr(12) = '1' else A_reg;
-
-
---ALU_y_proc: process(instr,A_reg,inM)
---begin
---if instr(12) = '1' then
---    alu_y_in <= inM;
---else
---    alu_y_in <= A_reg;
---end if;
---end process;
 
 
 end Behavioral;
