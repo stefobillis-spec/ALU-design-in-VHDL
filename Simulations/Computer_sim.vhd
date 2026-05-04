@@ -55,7 +55,20 @@ KBD_data_0_tb <= "00111001"; -- press "9"
 wait for 1 us;
 KBD_data_0_tb <= "00000000"; -- release key
 wait for 1.5 us;
-KBD_data_0_tb <= "10000000"; -- press "Enter"
+KBD_data_0_tb <= "10000000"; -- press "Enter" - 1st input is 93
+wait for 1 us;
+KBD_data_0_tb <= "00000000"; -- release key
+
+wait for 2 us;
+KBD_data_0_tb <= "00110101"; -- press "5"
+wait for 1 us;
+KBD_data_0_tb <= "00000000"; -- release key
+wait for 1.5 us;
+KBD_data_0_tb <= "00110100"; -- press "4"
+wait for 1 us;
+KBD_data_0_tb <= "00000000"; -- release key
+wait for 1.5 us;
+KBD_data_0_tb <= "00101101"; -- press "-" - 2nd input is -45
 wait for 1 us;
 KBD_data_0_tb <= "00000000"; -- release key
 

@@ -42,7 +42,7 @@ end component;
 
 ------------------ Memory component Declaration -------------------
 component Memory is
-    Generic( size : integer := 8;
+    Generic( size : integer := 14;
              bits : integer := 16);
     Port ( reset : in STD_LOGIC;
            clk : in STD_LOGIC;
